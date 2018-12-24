@@ -1,13 +1,17 @@
 import { ConnectedRouter } from 'connected-react-router';
 import * as History from 'history';
 import * as React from 'react';
-import { Route } from 'react-router';
+import { Route, Switch } from 'react-router';
 import {
+  HomePage,
   LandingPage
 } from '../pages';
 
 export const Router = ({ history }: { history: History.History }) => (
   <ConnectedRouter history={history}>
-    <Route exact={true} path={'/'} component={LandingPage} />
+    <Switch>
+      <Route exact={true} path={'/'} component={LandingPage} />
+      <Route path={'/Home'} component={HomePage} />
+    </Switch>
   </ConnectedRouter>
 );

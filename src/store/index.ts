@@ -1,4 +1,4 @@
 import createStore, { ApplicationState } from './createStore';
-// import * as actions from './actions';
+import * as sessionState from './session';
 
-export { createStore, ApplicationState };
+export { ApplicationState, createStore, sessionState };

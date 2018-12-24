@@ -1,23 +1,37 @@
 import * as History from 'history';
 import * as React from 'react';
-import { Provider } from 'react-redux';
-import { Store } from 'redux';
+import { connect } from 'react-redux';
 import './App.css';
+import { withAuthentication } from './auth/withAuthentication';
 import { createHistory, Router } from './routes';
-import { ApplicationState, createStore } from './store';
+import { ApplicationState } from './store';
+import { User } from './types';
 
-class App extends React.Component {
+interface AppProps {}
+
+interface StateMappedProps {
+  currentUser: User | null;
+}
+
+interface AppMergedProps extends
+  StateMappedProps,
+  AppProps {}
+
+class DisconnectedApp extends React.Component<AppMergedProps> {
   private history: History.History = createHistory();
-
-  private store: Store<ApplicationState> = createStore(this.history);
   
   public render() {
     return (
-      <Provider store={this.store}>
-        <Router history={this.history} />
-      </Provider>
+      <Router history={this.history} />
     );
   }
 }
 
-export default App;
+const mapStateToProps = (state: ApplicationState) => ({
+  currentUser: state.sessionState.currentUser,
+});
+
+const ConnectedApp = connect<StateMappedProps, null, AppProps>
+(mapStateToProps)(DisconnectedApp);
+
+export const App = withAuthentication(ConnectedApp) as any;

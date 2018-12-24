@@ -15,14 +15,16 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import thunk from 'redux-thunk';
+import { sessionState } from './index';
 
 export interface ApplicationState {
   router: RouterState;
+  sessionState: sessionState.SessionState,
 }
 
 export default (history: History.History): Store<ApplicationState> => {
 
-  const middleware = process.env.NODE === 'development' ? composeWithDevTools(
+  const middleware = process.env.NODE_ENV === 'development' ? composeWithDevTools(
     applyMiddleware(routerMiddleware(history)),
     applyMiddleware(thunk)
   ) : compose(
@@ -31,13 +33,13 @@ export default (history: History.History): Store<ApplicationState> => {
   );
 
   const rootReducer = combineReducers<ApplicationState>({
-    router: connectRouter(history)
+    router: connectRouter(history),
+    sessionState: sessionState.reducer,
   });
 
   const persistConfig = {
     key: 'root',
     storage,
-    whitelist: []
   };
 
   const persistedReducer = persistReducer(persistConfig, rootReducer);
