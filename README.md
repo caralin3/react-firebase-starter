@@ -10,3 +10,5 @@ Includes the following libraries:
 * redux
 * redux-persist
 * firebase
+
+Uses Firebase for Authentication and the RealTime Database
